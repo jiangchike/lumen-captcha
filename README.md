@@ -8,10 +8,11 @@
 
 ## 安装
 * 项目必须启用缓存才能使用，因为验证码和验证码绑定的uuid都是保存在缓存的。
-project's `composer.json`.
+下载源码，将源码中的文件放入vendor/jc/文件夹下
 ```json
-composer require aishan/lumen-captcha
+git clone 
 ```
+
 
 or
 
