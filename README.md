@@ -7,10 +7,9 @@
 ![Preview](http://i.imgur.com/HYtr744.png)
 
 ## 安装
-* 项目必须启用缓存才能使用，因为验证码和验证码绑定的uuid都是保存在缓存的。
-下载源码，将源码中的文件放入vendor/jc/文件夹下
+* 项目必须启用缓存才能使用，因为验证码和验证码绑定的uuid都是保存在缓存的。 project's composer.json.
 ```json
-git clone 
+composer require aishan/lumen-captcha
 ```
 
 
@@ -45,7 +44,7 @@ or
 /**
  * captcha配置
  */
-config(['captcha'=>
+config(
     [
         'useful_time'=>5,//验证码有效时间，单位（分钟）
         'captcha_characters'=>'2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ',
@@ -66,8 +65,39 @@ config(['captcha'=>
             'fontColors'=>['#339900','#ff3300','#9966ff','#3333ff'],//字体颜色
         ],
     ]
-]);
+);
+```php
+或者在config目录下创建captch.php配置文件：
+php
+/**
+ * captcha配置
+ */
+return [
+    'useful_time'=>5,//验证码有效时间，单位（分钟）
+    'captcha_characters'=>'2346789abcdefghjmnpqrtuxyzABCDEFGHJMNPQRTUXYZ',
+    'sensitive' =>false,//验证码大小写是否敏感
+    'login'   => [//登陆验证码样式
+        'length'    => 4,//验证码字数
+        'width'     => 120,//图片宽度
+        'height'    => 30,//字体大小和图片高度
+        'angle'    => 30,//验证码中字体倾斜度
+        'lines'    => 5,//生成横线条数
+        'quality'   => 100,//品质
+        'invert'    =>false,//反相
+        'bgImage'   =>true,//是否有背景图
+        'bgColor'   =>'#ffffff',
+        'blur'   =>0,//模糊度
+        'sharpen'   =>0,//锐化
+        'contrast'   =>0,//反差
+        'fontColors'=>['#339900','#ff3300','#9966ff','#3333ff'],//字体颜色
+    ]
+];
 ```
+在`bootstrap/app.php`中加入
+```php
+$app->configure('captcha');
+```
+
 当然，也可以不配置，默认就是default的样式，验证码有效时间5分钟。
 ## 使用范例
 因为lumen一般写的都是无状态的API，所以此处验证码的图片必须绑定一个uuid，获取图片验证码时，先获取验证码url地址和uuid，然后在验证时，提交验证码和uuid一并验证码。
