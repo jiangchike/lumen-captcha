@@ -337,7 +337,10 @@ class Captcha //extends Captcha
      */
     protected function font()
     {
-        return $this->fonts[rand(0, count($this->fonts) - 1)];
+        $font = $this->fonts[rand(0, count($this->fonts) - 1)];
+        $fonts_info = pathinfo($font);
+        $fonts_str = $fonts_info['dirname'] . '/' . $fonts_info['basename'];
+        return $fonts_str;
     }
 
     /**
