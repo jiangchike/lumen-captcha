@@ -66,9 +66,7 @@ config(
         ],
     ]
 );
-```php
 或者在config目录下创建captch.php配置文件：
-php
 /**
  * captcha配置
  */
@@ -102,7 +100,14 @@ $app->configure('captcha');
 ## 使用范例
 因为lumen一般写的都是无状态的API，所以此处验证码的图片必须绑定一个uuid，获取图片验证码时，先获取验证码url地址和uuid，然后在验证时，提交验证码和uuid一并验证码。
 ### 生成验证码
-获取验证码信息：
+生成验证码(直接返回验证码图片)：
+```
+{站点域名}/captcha[/{type}/{captchaId}]
+```
+例：www.baidu.com/captcha/default/mycaptch
+
+
+获取验证码信息（并不创建验证码，暂时并没有什么卵用）：
 ```
 {站点域名}/captchaInfo/{type?}
 ```
@@ -121,7 +126,7 @@ $app->configure('captcha');
 ```
 `captchaUrl`为验证码图片地址，`captchaUuid`为绑定验证码图片的uuid。
 #### 验证验证码
-在请求中将验证码的值和uuid随着你的post请求一起发到服务端，在接收参数的地方做验证即可：
+在请求中将验证码的值和captchaId随着你的post请求一起发到服务端，在接收参数的地方做验证即可：
 ```php
 public function checkCaptcha(Request $request, $type = 'default',$captchaUuid)
     {
