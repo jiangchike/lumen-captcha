@@ -28,7 +28,8 @@ class LumenCaptchaController extends Controller
      */
     public function getCaptcha(Captcha $captcha, $type = 'default',$captchaId)
     {
-        return $captcha->createById($type,$captchaId);
+        $image = $captcha->createById($type,$captchaId);
+        return $image->response('png', 90);
     }
 
     /**
@@ -39,13 +40,20 @@ class LumenCaptchaController extends Controller
      */
     public function getCaptchaInfo(Request $request,$type = 'default')
     {
-        $urlDomain = substr(str_replace($request->decodedPath(),'',$request->url()),0,-1);
-        $captchaUuid = $this->generate_uuid();
-        $captchaData = [
-            'captchaUrl'=>$urlDomain.'/captcha/'.$type.'/'.$captchaUuid,
-            'captchaUuid'=>(string)$captchaUuid
-        ];
-        return makeSuccessMsg($captchaData);
+       try {
+            $urlDomain = substr(str_replace($request->decodedPath(), '', $request->url()), 0, -1);
+            $captchaUuid = $this->generate_uuid();
+            $captchaData = [
+                'code' => 200,
+                'captchaUrl' => $urlDomain . '/captcha/' . $type . '/' . $captchaUuid,
+                'captchaUuid' => (string)$captchaUuid,
+                'captchaImg' => $captcha->createByUuid($type, $captchaUuid)->encoded,
+            ];
+        } catch (\Exception $e) {
+            return response()->json(['msg'=>'获取验证码信息失败', 'code'=>405]);
+        }
+
+        return response()->json($captchaData);
     }
 
     /**
