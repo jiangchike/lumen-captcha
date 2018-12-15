@@ -19,8 +19,8 @@ class CaptchaServiceProvider extends ServiceProvider {
     public function boot()
     {
         // HTTP routing
-        $this->app->get('captchaInfo[/{type}]', 'Aishan\LumenCaptcha\LumenCaptchaController@getCaptchaInfo');
-        $this->app->get('captcha/{type}/{captchaId}', 'Aishan\LumenCaptcha\LumenCaptchaController@getCaptcha');
+        $this->app['router']->get('captchaInfo[/{type}]', 'Aishan\LumenCaptcha\LumenCaptchaController@getCaptchaInfo');
+        $this->app['router']->get('captcha/{type}/{captchaId}', 'Aishan\LumenCaptcha\LumenCaptchaController@getCaptcha');
 
         // Validator extensions
         $this->app['validator']->extend('captcha', function($attribute, $value, $parameters)
